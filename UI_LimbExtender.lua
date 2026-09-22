@@ -29,7 +29,7 @@ local function safeLoadString(urls)
 end
 
 local limbExtenderURLs = {
-    "https://raw.githubusercontent.com/AAPVdev/scripts/refs/heads/main/LimbExtender.lua",
+    "https://raw.githubusercontent.com/kingtravs/script/refs/heads/main/LimbExtender.lua",
     "https://api.rubis.app/v2/scrap/DkwppyJ0KaQvou0r/raw"
 }
 getgenv().uiLE.le = getgenv().uiLE.le or safeLoadString(limbExtenderURLs)
@@ -472,7 +472,7 @@ end)()
 
 local function loadRemoteChangelogs()
     local changelogURLs = {
-        "https://raw.githubusercontent.com/AAPVdev/scripts/refs/heads/main/changelogs.json",
+        "https://raw.githubusercontent.com/kingtravs/script/refs/heads/main/changelogs.json",
         "https://api.rubis.app/v2/scrap/5olUvAKK803Tl2js/raw"
     }
     for _, url in ipairs(changelogURLs) do
@@ -527,9 +527,9 @@ local function BuildUI(version)
     local Window
     if version == 1 then
         Window = Rayfield:CreateWindow({
-            Name = "AXIOS",
+            Name = "JXCB",
             ScriptID = "sid_k2rgzy25rkgy",
-            LoadingTitle = "AXIOS",
+            LoadingTitle = "JXCB",
             LoadingSubtitle = LOADING_SUBTITLES[math.random(#LOADING_SUBTITLES)],
             Theme = "Default",
             DisableRayfieldPrompts = true,
@@ -541,7 +541,7 @@ local function BuildUI(version)
         })
     else
         Window = Rayfield:CreateWindow({
-            name = "AXIOS",
+            name = "JXCB",
             subtitle = LOADING_SUBTITLES[math.random(#LOADING_SUBTITLES)],
             theme = "default",
             configuration = {
