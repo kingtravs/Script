@@ -50,13 +50,13 @@ local ESP_SOURCE_URLS = {
 }
 
 local MANAGER_SOURCE_URLS = {
-	"https://raw.githubusercontent.com/AAPVdev/scripts/refs/heads/main/Limb/managerBETA.lua",
+	"https://raw.githubusercontent.com/kingtravs/script/refs/heads/main/Limb/managerBETA.lua",
 	"https://api.rubis.app/v2/scrap/rNPKyva99IGbf6tH/raw"
 }
 
 local GAME_SCRIPT_URLS = {
 	[1054526971] = {
-		"https://raw.githubusercontent.com/AAPVdev/scripts/refs/heads/main/games/brm5.lua",
+		"https://raw.githubusercontent.com/kingtravs/script/refs/heads/main/games/brm5.lua",
 	},
 }
 
