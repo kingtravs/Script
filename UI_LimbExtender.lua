@@ -527,7 +527,7 @@ local function BuildUI(version)
     local Window
     if version == 1 then
         Window = Rayfield:CreateWindow({
-            Name = "SOLACE",
+            Name = "Solace",
             ScriptID = "sid_k2rgzy25rkgy",
             LoadingTitle = "Solace",
             LoadingSubtitle = LOADING_SUBTITLES[math.random(#LOADING_SUBTITLES)],
