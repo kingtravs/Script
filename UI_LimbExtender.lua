@@ -522,7 +522,6 @@ local function BuildUI(version)
         "𝗠𝗮𝘃𝗲𝗻 𝗵𝘂𝗯",
         "JXC LIKE THICK THIGHS",
         "YOU'RE HACKED BY JXC"
-        "Use Haxs From JXC fr"
     }
 
     local Window
