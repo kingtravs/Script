@@ -517,9 +517,9 @@ local function BuildUI(version)
 
     local LOADING_SUBTITLES = {
         "Built By JXC",
-        "𝗠𝗮𝘃𝗲𝗻 | No. 1",
+        "Solace | No. 1",
         "Shoutout To Rene Baterbonia",
-        "𝗠𝗮𝘃𝗲𝗻 𝗵𝘂𝗯",
+        "Solace V3",
         "JXC LIKE THICK THIGHS",
         "YOU'RE HACKED BY JXC"
     }
@@ -527,9 +527,9 @@ local function BuildUI(version)
     local Window
     if version == 1 then
         Window = Rayfield:CreateWindow({
-            Name = "𝗠𝗮𝘃𝗲𝗻",
+            Name = "SOLACE",
             ScriptID = "sid_k2rgzy25rkgy",
-            LoadingTitle = "𝗠𝗮𝘃𝗲𝗻",
+            LoadingTitle = "Solace",
             LoadingSubtitle = LOADING_SUBTITLES[math.random(#LOADING_SUBTITLES)],
             Theme = "Default",
             DisableRayfieldPrompts = true,
@@ -541,7 +541,7 @@ local function BuildUI(version)
         })
     else
         Window = Rayfield:CreateWindow({
-            name = "𝗠𝗮𝘃𝗲𝗻",
+            name = "Solace",
             subtitle = LOADING_SUBTITLES[math.random(#LOADING_SUBTITLES)],
             theme = "default",
             configuration = {
