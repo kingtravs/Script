@@ -1,223 +1,189 @@
-local cloneref = cloneref or function(obj) return obj end
-local Players = cloneref(game:GetService("Players"))
-local hui = gethui()
-
-local module = {}
-module.VERSION = "2.0.0"
-
-local activeHighlights = {}
-local uniqueCounter = 0
-
-module.defaults = {
-    FillColor = Color3.fromRGB(255, 255, 0),
-    OutlineColor = Color3.new(1, 1, 1),
-    FillTransparency = 0.5,
-    OutlineTransparency = 0.5,
+local _0xA9B6 = _0xA9B6 or function(obj) return obj end
+local _0x5260 = _0xA9B6(game:GetService(string.char(80,108,97,121,101,114,115)))
+local _0x6D5E = gethui()
+local _0xD444 = {}
+_0xD444.VERSION =string.char(50,46,48,46,48)local _0x558A = {}
+local _0x0EAC = 0
+_0xD444.defaults = {
+FillColor = Color3.fromRGB(255, 255, 0),
+OutlineColor = Color3.new(1, 1, 1),
+FillTransparency = 0.5,
+OutlineTransparency = 0.5,
 }
-
-local function applyProperties(highlight, properties)
-    if typeof(properties) ~= "table" then
-        warn("CharacterHighlighter: properties must be a table, got " .. typeof(properties))
-        return
-    end
-    for prop, value in pairs(properties) do
-        local ok, err = pcall(function()
-            highlight[prop] = value
-        end)
-        if not ok then
-            warn(("CharacterHighlighter: failed to set property '%s' - %s"):format(prop, tostring(err)))
-        end
-    end
+local function _0x3658(_0x9B76, properties)
+if typeof(properties) ~=string.char(116,97,98,108,101)then
+warn(string.char(67,104,97,114,97,99,116,101,114,72,105,103,104,108,105,103,104,116,101,114,58,32,112,114,111,112,101,114,116,105,101,115,32,109,117,115,116,32,98,101,32,97,32,116,97,98,108,101,44,32,103,111,116,32).. typeof(properties))
+return
 end
-
-local function getUniqueId()
-    uniqueCounter = uniqueCounter + 1
-    return "id" .. uniqueCounter
+for prop, value in pairs(properties) do
+local _0x947C, _0xF9CF = pcall(function()
+_0x9B76[prop] = value
+end)
+if not _0x947C then
+warn((string.char(67,104,97,114,97,99,116,101,114,72,105,103,104,108,105,103,104,116,101,114,58,32,102,97,105,108,101,100,32,116,111,32,115,101,116,32,112,114,111,112,101,114,116,121,32,39,37,115,39,32,45,32,37,115)):format(prop, tostring(_0xF9CF)))
 end
-
-local function recomputeVisibility(character)
-    local data = activeHighlights[character]
-    if not data then return end
-
-    local bestSource = nil
-    for _, source in pairs(data.sources) do
-        source.highlight.Enabled = false
-        if not source.suppressed and (not bestSource or source.priority > bestSource.priority) then
-            bestSource = source
-        end
-    end
-
-    if bestSource then
-        bestSource.highlight.Enabled = true
-    end
 end
-
-local function watchCharacter(character)
-    local destroyingConnection = character.Destroying:Connect(function()
-        module.removeAllHighlights(character)
-    end)
-    local ancestryConnection = character.AncestryChanged:Connect(function()
-        if not character:IsDescendantOf(game) then
-            module.removeAllHighlights(character)
-        end
-    end)
-    return { destroyingConnection, ancestryConnection }
 end
-
-function module.addHighlight(character, sourceKey, properties, priority)
-    if typeof(character) ~= "Instance" or not character:IsA("Model") then
-        warn("CharacterHighlighter: Expected a Model")
-        return nil
-    end
-    if typeof(sourceKey) ~= "string" then
-        warn("CharacterHighlighter: addHighlight requires a sourceKey string")
-        return nil
-    end
-
-    local data = activeHighlights[character]
-    if not data then
-        data = {
-            sources = {},
-            connections = watchCharacter(character),
-        }
-        activeHighlights[character] = data
-    end
-
-    local existing = data.sources[sourceKey]
-    if existing then
-        existing.highlight:Destroy()
-    end
-
-    local highlight = Instance.new("Highlight")
-    highlight.Name = "Highlight_" .. character.Name .. "_" .. sourceKey .. "_" .. getUniqueId()
-    highlight.Adornee = character
-    highlight.Enabled = false
-
-    applyProperties(highlight, module.defaults)
-    if properties then
-        applyProperties(highlight, properties)
-    end
-
-    highlight.Parent = hui
-
-    data.sources[sourceKey] = {
-        highlight = highlight,
-        priority = priority or 0,
-        suppressed = false,
-    }
-
-    recomputeVisibility(character)
-
-    return highlight
+local function _0xFAE6()
+_0x0EAC = _0x0EAC + 1
+returnstring.char(105,100).. _0x0EAC
 end
-
-function module.removeHighlight(character, sourceKey)
-    if typeof(sourceKey) ~= "string" then
-        warn("CharacterHighlighter: removeHighlight requires a sourceKey string - did you mean removeAllHighlights?")
-        return
-    end
-
-    local data = activeHighlights[character]
-    if not data then return end
-
-    local source = data.sources[sourceKey]
-    if not source then return end
-
-    source.highlight:Destroy()
-    data.sources[sourceKey] = nil
-
-    if next(data.sources) == nil then
-        for _, connection in ipairs(data.connections) do
-            connection:Disconnect()
-        end
-        activeHighlights[character] = nil
-    else
-        recomputeVisibility(character)
-    end
+local function _0x7B1F(character)
+local _0x8B77 = _0x558A[character]
+if not _0x8B77 then return end
+local _0x8D54 = nil
+for _, _0xE636 in pairs(_0x8B77.sources) do
+_0xE636.highlight.Enabled = false
+if not _0xE636.suppressed and (not _0x8D54 or _0xE636.priority > _0x8D54.priority) then
+_0x8D54 = _0xE636
 end
-
-function module.removeAllHighlights(character)
-    local data = activeHighlights[character]
-    if not data then return end
-
-    local sourceKeys = {}
-    for sourceKey in pairs(data.sources) do
-        table.insert(sourceKeys, sourceKey)
-    end
-    for _, sourceKey in ipairs(sourceKeys) do
-        module.removeHighlight(character, sourceKey)
-    end
 end
-
-function module.getHighlight(character, sourceKey)
-    local data = activeHighlights[character]
-    if not data then return nil end
-    local source = data.sources[sourceKey]
-    return source and source.highlight or nil
+if _0x8D54 then
+_0x8D54.highlight.Enabled = true
 end
-
-function module.isHighlighted(character, sourceKey)
-    local data = activeHighlights[character]
-    if not data then return false end
-    if sourceKey == nil then
-        return next(data.sources) ~= nil
-    end
-    return data.sources[sourceKey] ~= nil
 end
-
-function module.updateHighlight(character, sourceKey, properties)
-    local data = activeHighlights[character]
-    if not data then return false end
-    local source = data.sources[sourceKey]
-    if not source then return false end
-    applyProperties(source.highlight, properties)
-    return true
+local function _0x1F26(character)
+local _0xF396 = character.Destroying:Connect(function()
+_0xD444.removeAllHighlights(character)
+end)
+local _0x0173 = character.AncestryChanged:Connect(function()
+if not character:IsDescendantOf(game) then
+_0xD444.removeAllHighlights(character)
 end
-
-function module.setEnabled(character, sourceKey, enabled)
-    local data = activeHighlights[character]
-    if not data then return false end
-    local source = data.sources[sourceKey]
-    if not source then return false end
-    source.suppressed = not enabled
-    recomputeVisibility(character)
-    return true
+end)
+return { _0xF396, _0x0173 }
 end
-
-function module.allHighlights()
-    return coroutine.wrap(function()
-        for character, data in pairs(activeHighlights) do
-            local bestSource = nil
-            for _, source in pairs(data.sources) do
-                if not source.suppressed and (not bestSource or source.priority > bestSource.priority) then
-                    bestSource = source
-                end
-            end
-            if bestSource then
-                coroutine.yield(character, bestSource.highlight)
-            end
-        end
-    end)
+function _0xD444.addHighlight(character, sourceKey, properties, priority)
+if typeof(character) ~=string.char(73,110,115,116,97,110,99,101)or not character:IsA(string.char(77,111,100,101,108)) then
+warn(string.char(67,104,97,114,97,99,116,101,114,72,105,103,104,108,105,103,104,116,101,114,58,32,69,120,112,101,99,116,101,100,32,97,32,77,111,100,101,108))
+return nil
 end
-
-function module.allSources()
-    return coroutine.wrap(function()
-        for character, data in pairs(activeHighlights) do
-            for sourceKey, source in pairs(data.sources) do
-                coroutine.yield(character, sourceKey, source.highlight)
-            end
-        end
-    end)
+if typeof(sourceKey) ~=string.char(115,116,114,105,110,103)then
+warn(string.char(67,104,97,114,97,99,116,101,114,72,105,103,104,108,105,103,104,116,101,114,58,32,97,100,100,72,105,103,104,108,105,103,104,116,32,114,101,113,117,105,114,101,115,32,97,32,115,111,117,114,99,101,75,101,121,32,115,116,114,105,110,103))
+return nil
 end
-
-function module.clearAllHighlights()
-    local characters = {}
-    for character in pairs(activeHighlights) do
-        table.insert(characters, character)
-    end
-    for _, character in ipairs(characters) do
-        module.removeAllHighlights(character)
-    end
+local _0x8B77 = _0x558A[character]
+if not _0x8B77 then
+_0x8B77 = {
+sources = {},
+connections = _0x1F26(character),
+}
+_0x558A[character] = _0x8B77
 end
-
-return module
+local _0x50D2 = _0x8B77.sources[sourceKey]
+if _0x50D2 then
+_0x50D2.highlight:Destroy()
+end
+local _0x9B76 = Instance.new(string.char(72,105,103,104,108,105,103,104,116))
+_0x9B76.Name =string.char(72,105,103,104,108,105,103,104,116,95).. character.Name ..string.char(95).. sourceKey ..string.char(95).. _0xFAE6()
+_0x9B76.Adornee = character
+_0x9B76.Enabled = false
+_0x3658(_0x9B76, _0xD444.defaults)
+if properties then
+_0x3658(_0x9B76, properties)
+end
+_0x9B76.Parent = _0x6D5E
+_0x8B77.sources[sourceKey] = {
+_0x9B76 = _0x9B76,
+priority = priority or 0,
+suppressed = false,
+}
+_0x7B1F(character)
+return _0x9B76
+end
+function _0xD444.removeHighlight(character, sourceKey)
+if typeof(sourceKey) ~=string.char(115,116,114,105,110,103)then
+warn(string.char(67,104,97,114,97,99,116,101,114,72,105,103,104,108,105,103,104,116,101,114,58,32,114,101,109,111,118,101,72,105,103,104,108,105,103,104,116,32,114,101,113,117,105,114,101,115,32,97,32,115,111,117,114,99,101,75,101,121,32,115,116,114,105,110,103,32,45,32,100,105,100,32,121,111,117,32,109,101,97,110,32,114,101,109,111,118,101,65,108,108,72,105,103,104,108,105,103,104,116,115,63))
+return
+end
+local _0x8B77 = _0x558A[character]
+if not _0x8B77 then return end
+local _0xE636 = _0x8B77.sources[sourceKey]
+if not _0xE636 then return end
+_0xE636.highlight:Destroy()
+_0x8B77.sources[sourceKey] = nil
+if next(_0x8B77.sources) == nil then
+for _, connection in ipairs(_0x8B77.connections) do
+connection:Disconnect()
+end
+_0x558A[character] = nil
+else
+_0x7B1F(character)
+end
+end
+function _0xD444.removeAllHighlights(character)
+local _0x8B77 = _0x558A[character]
+if not _0x8B77 then return end
+local _0xF2FC = {}
+for sourceKey in pairs(_0x8B77.sources) do
+table.insert(_0xF2FC, sourceKey)
+end
+for _, sourceKey in ipairs(_0xF2FC) do
+_0xD444.removeHighlight(character, sourceKey)
+end
+end
+function _0xD444.getHighlight(character, sourceKey)
+local _0x8B77 = _0x558A[character]
+if not _0x8B77 then return nil end
+local _0xE636 = _0x8B77.sources[sourceKey]
+return _0xE636 and _0xE636.highlight or nil
+end
+function _0xD444.isHighlighted(character, sourceKey)
+local _0x8B77 = _0x558A[character]
+if not _0x8B77 then return false end
+if sourceKey == nil then
+return next(_0x8B77.sources) ~= nil
+end
+return _0x8B77.sources[sourceKey] ~= nil
+end
+function _0xD444.updateHighlight(character, sourceKey, properties)
+local _0x8B77 = _0x558A[character]
+if not _0x8B77 then return false end
+local _0xE636 = _0x8B77.sources[sourceKey]
+if not _0xE636 then return false end
+_0x3658(_0xE636.highlight, properties)
+return true
+end
+function _0xD444.setEnabled(character, sourceKey, enabled)
+local _0x8B77 = _0x558A[character]
+if not _0x8B77 then return false end
+local _0xE636 = _0x8B77.sources[sourceKey]
+if not _0xE636 then return false end
+_0xE636.suppressed = not enabled
+_0x7B1F(character)
+return true
+end
+function _0xD444.allHighlights()
+return coroutine.wrap(function()
+for character, _0x8B77 in pairs(_0x558A) do
+local _0x8D54 = nil
+for _, _0xE636 in pairs(_0x8B77.sources) do
+if not _0xE636.suppressed and (not _0x8D54 or _0xE636.priority > _0x8D54.priority) then
+_0x8D54 = _0xE636
+end
+end
+if _0x8D54 then
+coroutine.yield(character, _0x8D54.highlight)
+end
+end
+end)
+end
+function _0xD444.allSources()
+return coroutine.wrap(function()
+for character, _0x8B77 in pairs(_0x558A) do
+for sourceKey, _0xE636 in pairs(_0x8B77.sources) do
+coroutine.yield(character, sourceKey, _0xE636.highlight)
+end
+end
+end)
+end
+function _0xD444.clearAllHighlights()
+local _0x8E17 = {}
+for character in pairs(_0x558A) do
+table.insert(_0x8E17, character)
+end
+for _, character in ipairs(_0x8E17) do
+_0xD444.removeAllHighlights(character)
+end
+end
+return _0xD444
